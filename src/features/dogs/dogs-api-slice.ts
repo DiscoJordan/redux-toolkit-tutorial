@@ -11,24 +11,24 @@ export interface Breed {
   };
 }
 
- export const apiSlice = createApi({
+export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://api.thedogapi.com/v1",
-prepareHeaders(headers){
-    headers.set('x-api-key', DOGS_API_KEY);
-    return headers
-}
+    prepareHeaders(headers) {
+      headers.set("x-api-key", DOGS_API_KEY);
+      return headers;
+    },
   }),
-  endpoints(builder){
+  endpoints(builder) {
     return {
-        fetchBreeds: builder.query<Breed[],number|void>({
-            query(limit = 10){
-                return `/breeds?limit=${limit}`
-            }
-        })
-    }
-  }
+      fetchBreeds: builder.query<Breed[], number | void>({
+        query(limit = 10) {
+          return `/breeds?limit=${limit}`;
+        },
+      }),
+    };
+  },
 });
 
-export const {useFetchBreedsQuery }= apiSlice
+export const { useFetchBreedsQuery } = apiSlice;

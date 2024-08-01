@@ -9,7 +9,7 @@ function App() {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
 
-  const { data = [], isFetching } = useFetchBreedsQuery(numDogs);
+  const { data = [], isFetching, error } = useFetchBreedsQuery(numDogs);
 
   function handleClick() {
     dispatch(incremented());
@@ -17,6 +17,8 @@ function App() {
   function amountClick(amount: number) {
     dispatch(amountAdded(amount));
   }
+
+  
 
   return (
     <>
@@ -28,37 +30,57 @@ function App() {
         </p>
       </div>
       <div className="card">
-        <select value={numDogs} onChange={(e)=>setNumDogs(Number(e.target.value))}>
+        <select
+          value={numDogs}
+          onChange={(e) => setNumDogs(Number(e.target.value))}
+        >
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="15">15</option>
           <option value="20">20</option>
-
         </select>
       </div>
-      <div className="card">
-        <p>Numbers of dogs fetched: {data.length}</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Picture</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((breed) => (
-              <>
-                <tr key={breed.id}>
-                  <td>{breed.name}</td>
-                  <td>
-                    <img style={{ width: 500 }} src={breed.image.url} alt="" />
-                  </td>
-                </tr>
-              </>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      {isFetching && (
+        <div className="card">
+          <h1>Loading...</h1>
+        </div>
+      )}
+      {error && (
+        <div className="card">
+          <h1>error</h1>
+        </div>
+      )}
+
+      {data && !isFetching && (
+        <div className="card">
+          <p>Numbers of dogs fetched: {data.length}</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Picture</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((breed) => (
+                <>
+                  <tr key={breed.id}>
+                    <td>{breed.name}</td>
+                    <td>
+                      <img
+                        style={{ width: 500 }}
+                        src={breed.image.url}
+                        alt=""
+                      />
+                    </td>
+                  </tr>
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }
